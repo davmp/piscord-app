@@ -1,248 +1,79 @@
-# Piscord – Chat em Tempo Real Full Stack 🚀
+# Piscord – Real-time Full Stack Chat Application 🚀
 
-Aplicação inspirada em plataformas de chat, utilizando Angular no frontend, Go (com Gorilla Toolkit) no backend e MongoDB para armazenamento. Projeto avançado para mostrar integração real-time, autenticação e arquitetura escalável na prática.
+Piscord is a real-time chat application inspired by modern platforms, built to demonstrate a robust and scalable architecture. This repository contains the **Kubernetes infrastructure and deployment manifests** to orchestrate the Piscord services.
 
-## 🚩 Motivação do Projeto
+The application is composed of:
+-   **Frontend**: Angular 17+ (Material, PrimeNG)
+-   **Backend**: Go (Gorilla Mux, WebSocket)
+-   **Database**: MongoDB & Redis
 
-Criado para aprender na prática como unir Angular, Go e MongoDB em uma aplicação real-time robusta. Ideal como showcase para recrutadores e times técnicos que buscam desenvolvedores com domínio em soluções web modernas e comunicação instantânea.
+## 📋 Prerequisites
 
-## ✨ Funcionalidades
+To run this project locally, ensure you have the following tools installed:
 
-- Autenticação básica de usuários (JWT)
-- Chat em tempo real por WebSocket
-- Lista de conversas e usuários online
-- Persistência de mensagens, salas e notificações no MongoDB
-- CRUD de usuários, mensagens, salas e notificações
-- Interface responsiva e otimizada em Angular
-- Backend estruturado com Gorilla Mux (Go)
-- Separação entre camadas: API, sockets, serviços e modelos
-- Manifestos Kubernetes para deploys automatizados
-- Configuração centralizada para ambientes de desenvolvimento e produção
+-   [Docker](https://www.docker.com/)
+-   [k3d](https://k3d.io/) (Lightweight Kubernetes wrapper for Docker)
+-   [kubectl](https://kubernetes.io/docs/tasks/tools/)
+-   [Make](https://www.gnu.org/software/make/)
 
-## 🛠️ Tecnologias Utilizadas
+## 🚀 Quick Start
 
-- **DevOps:** Kubernetes, Docker
-- **Frontend:** Angular 17+, TypeScript, RxJS, Angular Material, PrimeNG
-- **Backend:** Go 1.21+, Gorilla Mux/WS, Gin, Middleware customizado, WebSocket
-- **Persistência:** MongoDB, Redis
-- **Autenticação:** JWT (JSON Web Tokens)
-- **Testes:** Go Test (backend)
+You can spin up the entire environment with a few commands using the provided `Makefile`.
 
-## 🏗️ Estrutura
+### 1. Create the Cluster
+Initialize a local K3s cluster named `piscord` with load balancer support.
 
-- `/clusters/production`: Configuração do ambiente para prod
-- `/clusters/staging`: Configuração do ambiente para dev/hom
-- `/helm/`: Helm charts para piscord-app, piscord-app-frontend, piscord-app-backend
+```bash
+make cluster-up
+```
 
-## 🚀 Como Executar
-
-1. Clone esse repositorio
-2. Configure o ambiente e valores
-3. Aplique os manifestosvia `kubectl` ou instale charts via `helm`
-4. Monitore e gerencie via sua ferramenta cloud-native
-
-### 🧰 Comandos úteis (Makefile)
-
-Os comandos abaixo facilitam o gerenciamento completo do cluster Kubernetes:
-
-**Deploy completo da aplicação**
+### 2. Deploy Resources
+Apply all Kubernetes manifests (Namespace, MongoDB, Backend, Frontend, Ingress).
 
 ```bash
 make deploy
 ```
 
-**Reiniciar frontend e backend (novo deploy de imagem ou config)**
+### 3. Access the Application
+Once deployed, the application should be accessible at:
 
-```bash
-make restart
+-   **Frontend**: `http://localhost:80` (or `https://localhost:443`)
+
+> **Note**: It may take a minute for all pods to reach `Running` status. You can check the status with `make status`.
+
+## 🛠️ Available Commands
+
+The `Makefile` provides several utility commands to manage the lifecycle of the application:
+
+| Command | Description |
+| :--- | :--- |
+| `make cluster-up` | Creates a new k3d cluster named `piscord`. |
+| `make cluster-down` | Deletes the `piscord` k3d cluster. |
+| `make deploy` | Applies all K8s manifests (`k8s/`) to the cluster. |
+| `make restart` | Restarts frontend and backend deployments (useful after image updates). |
+| `make logs` | Tails logs for frontend, backend, and mongodb pods simultaneously. |
+| `make status` | Shows the current status of pods and services in the `piscord` namespace. |
+| `make delete` | Removes all deployed resources from the cluster (keeps the cluster running). |
+
+## 🏗️ Architecture & Directory Structure
+
+This repository focuses on the **Infrastructure as Code (IaC)** aspect.
+
+```text
+.
+├── k8s/
+│   ├── backend/      # Backend Deployment & Service
+│   ├── frontend/     # Frontend Deployment & Service
+│   ├── mongodb/      # MongoDB StatefulSet & Service
+│   ├── namespace.yaml
+│   └── ingress.yaml
+├── Makefile          # Automation scripts
+└── README.md         # Documentation
 ```
 
-**Ver logs de todos os serviços**
+## 🔗 References
 
-```bash
-make logs
-```
+For the source code of the application services, please visit:
 
-**Status dos pods e serviços**
-
-```bash
-make status
-```
-
-**Remover toda a aplicação**
-
-```bash
-make delete
-```
-
-## 📖 Referencias
-
-- Frontend: [piscord-frontend](https://github.com/davmp/piscord-app-frontend)
-- Backend: [piscord-backend](https://github.com/davmp/piscord-app-backend)
-
-<!-- ## 🚀 Como Executar
-
-Esta aplicação utiliza Docker e Docker Compose para automatizar o setup do ambiente, facilitando a reprodução por outros usuários.
-
-### Pré-requisitos
-
-- Docker instalado ([Get Docker](https://docs.docker.com/get-started/get-docker/))
-- Docker Compose
-
-### Passos para execução
-
-1. Abrir o projeto:
-
-```bash
-git clone https://github.com/davmp/Piscord-Chat-App.git piscord-chat-app
-
-# Entrar na pasta do projeto
-cd piscord-chat-app
-```
-
-2. Copie `.env.example` para `.env`:
-
-```bash
-# Linux and MacOS
-cp .env.example .env
-
-# Windows (CMD)
-copy .env.example .env
-
-# Windows (PowerShell)
-Copy-Item .env.example .env
-```
-
-3. IMPORTANTE: Configure o ambiente seguindo os [passos listados aqui](#-configura%C3%A7%C3%A3o-de-ambiente).
-
-   - Preencha o `.env` com seus próprios valores (JWT secret, URLs etc.) [(Veja mais)](#configurando-as-portas)
-
-4. Depois de configurar o ambiente, execute o seguinte comando para iniciar os serviços (frontend, backend e banco MongoDB):
-
-```bash
-docker compose up --build -d
-```
-
-5. A aplicação estará disponível por padrão em http://localhost:6786.
-
-> Em caso de algum erro, revise a configuração do ambiente [listada aqui](#-configura%C3%A7%C3%A3o-de-ambiente).
-
-7. Para parar os serviços:
-
-```bash
-docker compose down
-
-# Deletar os containers e imagens criados
-docker compose rm -f
-```
-
-# 🔒 Configuração de Ambiente
-
-## Configurando as variáveis de ambiente (_.env_)
-
-### Configurando as portas
-
-A porta externa que você vai usar para acessar o Frontend (http://localhost:FRONTEND_PORT)
-
-```bash
-FRONTEND_PORT=6786
-```
-
-A porta interna que o Backend em Go escuta
-
-```bash
-BACKEND_PORT=8000
-```
-
-### Configurando banco de dados
-
-Credenciais do banco de dados (USADO SOMENTE PARA INICIALIZAR O SERVIÇO MONGODB)
-
-```bash
-MONGO_ROOT_USERNAME=usuarioAdmin
-MONGO_ROOT_PASSWORD=senhaSecreta123
-
-# Nome do volume do mongo (padrão)
-MONGO_VOLUME_NAME=mongo-data
-```
-
-Dados de conexão que o Backend vai usar.
-
-Nota: 'mongodb' é o nome do serviço definido em `docker-compose.yml`.
-
-PRECISA ser igual o usuário/senha acima.
-
-MONGO_URI=mongodb://usuarioAdmin:senhaSecreta123@mongodb:27017
-
-### Gerando uma chave secreta JWT
-
-Para criar uma chave aleatória e segura para o JWT no console:
-
-#### Usando Node.js:
-
-```bash
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-```
-
-Copie o resultado e coloque no campo `JWT_SECRET` do seu `.env`.
-
-#### Usando OpenSSL
-
-```bash
-openssl rand -base64 32
-```
-
-Copie a saída e utilize como sua chave secreta.
-
-## Configurando NGINX
-
-Crie um arquivo de configuração do Nginx em `/Frontend/nginx.conf`.
-
-Configuração padrão do Nginx:
-
-```bash
-server {
-    listen 80;
-    server_name localhost;
-
-    root /usr/share/nginx/html;
-    index /index.html;
-
-    location / {
-        try_files $uri $uri/ /index.html;
-    }
-
-    location /api/ {
-        proxy_pass http://backend:8000/api/;
-        proxy_http_version 1.1;
-
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-
-        proxy_buffering off;
-
-        proxy_read_timeout 86400;
-        proxy_send_timeout 86400;
-    }
-
-    location /api/ws {
-        proxy_pass http://backend:8000/api/ws;
-        proxy_http_version 1.1;
-
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-
-        proxy_read_timeout 86400;
-    }
-}
-``` -->
+-   **Frontend Repository**: [piscord-app-frontend](https://github.com/davmp/piscord-app-frontend)
+-   **Backend Repository**: [piscord-app-backend](https://github.com/davmp/piscord-app-backend)
