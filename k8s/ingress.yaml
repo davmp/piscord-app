@@ -1,0 +1,49 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: piscord
+  namespace: piscord
+  annotations:
+    nginx.ingress.kubernetes.io/websocket-services: "backend"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+spec:
+  rules:
+    # 1. Match piscord.local (desktop)
+    - host: piscord.local
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 8000
+
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80
+
+    # 2. Match ANY host (IP-based access)
+    - http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 8000
+
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80

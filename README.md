@@ -41,6 +41,40 @@ Criado para aprender na prática como unir Angular, Go e MongoDB em uma aplicaç
 3. Aplique os manifestosvia `kubectl` ou instale charts via `helm`
 4. Monitore e gerencie via sua ferramenta cloud-native
 
+### 🧰 Comandos úteis (Makefile)
+
+Os comandos abaixo facilitam o gerenciamento completo do cluster Kubernetes:
+
+**Deploy completo da aplicação**
+
+```bash
+make deploy
+```
+
+**Reiniciar frontend e backend (novo deploy de imagem ou config)**
+
+```bash
+make restart
+```
+
+**Ver logs de todos os serviços**
+
+```bash
+make logs
+```
+
+**Status dos pods e serviços**
+
+```bash
+make status
+```
+
+**Remover toda a aplicação**
+
+```bash
+make delete
+```
+
 ## 📖 Referencias
 
 - Frontend: [piscord-frontend](https://github.com/davmp/piscord-app-frontend)
