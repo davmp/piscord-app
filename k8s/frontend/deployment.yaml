@@ -16,7 +16,6 @@ spec:
       containers:
         - name: frontend
           image: ghcr.io/davmp/piscord-app-frontend:latest
-          imagePullPolicy: Never
           envFrom:
             - configMapRef:
                 name: frontend-config
