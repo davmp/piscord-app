@@ -62,9 +62,33 @@ make deploy
 ```
 
 ### 3. Access the Application
-Once deployed, the application should be accessible at:
+Once deployed, the application is accessible via:
 
--   **Frontend**: `http://localhost:80` (or `https://localhost:443`)
+-   **Localhost**: `http://localhost:80` (or `https://localhost:443`)
+-   **LAN**: You can access the application from other devices on your local network using your machine's LAN IP address.
+
+#### Find your LAN IP
+To find your local IP address, run:
+
+```bash
+# Linux / macOS
+ipconfig getifaddr en0   # macOS (Wi-Fi)
+# OR
+ifconfig | grep "inet " | grep -v 127.0.0.1
+```
+
+#### Custom Domain (Optional)
+You can also access the application via `http://piscord.local` by adding an entry to your `/etc/hosts` file.
+
+1.  Open `/etc/hosts` with sudo privileges:
+    ```bash
+    sudo nano /etc/hosts
+    ```
+2.  Add the following line (replace `<YOUR_LAN_IP>` with your actual IP, or use `127.0.0.1` for local only):
+    ```text
+    127.0.0.1   piscord.local
+    ```
+3.  Save and exit. You can now access the app at `http://piscord.local`.
 
 > **Note**: It may take a minute for all pods to reach `Running` status. You can check the status with `make status`.
 
