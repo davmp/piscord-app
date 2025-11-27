@@ -16,7 +16,34 @@ To run this project locally, ensure you have the following tools installed:
 -   [kubectl](https://kubernetes.io/docs/tasks/tools/)
 -   [Make](https://www.gnu.org/software/make/)
 
-## 🚀 Quick Start
+## 🔒 Secrets & Configuration
+
+> [!IMPORTANT]
+> Before deploying, you **MUST** generate and fill in the secrets in the Kubernetes manifests. The application will not start correctly without them.
+
+### 1. Generate Base64 Secrets
+You can generate base64 encoded strings using the terminal:
+
+```bash
+# Example: Generate a base64 string for "mypassword"
+echo -n "mypassword" | base64
+```
+
+### 2. Update Manifests
+Update the following files with your generated values:
+
+#### `k8s/backend/secret.yaml`
+-   `JWT_SECRET`: Base64 encoded secret key for JWT tokens.
+
+#### `k8s/mongodb/secret.yaml`
+-   `MONGO_INITDB_ROOT_USERNAME`: Base64 encoded MongoDB root username.
+-   `MONGO_INITDB_ROOT_PASSWORD`: Base64 encoded MongoDB root password.
+
+#### `k8s/backend/configmap.yaml`
+-   `MONGO_URI`: Update the connection string with your **plain text** (not base64) username and password.
+    -   Format: `mongodb://<username>:<password>@mongodb.piscord.svc.cluster.local:27017/piscord?authSource=admin`
+
+## 🔥 Quick Start
 
 You can spin up the entire environment with a few commands using the provided `Makefile`.
 
