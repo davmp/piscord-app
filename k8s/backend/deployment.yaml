@@ -15,7 +15,6 @@ spec:
     spec:
       containers:
         - name: backend
-          # image: ghcr.io/davmp/piscord-app-backend:latest
           image: ghcr.io/davmp/piscord-app-backend:latest
           envFrom:
             - configMapRef:
