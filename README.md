@@ -1,25 +1,12 @@
 # Piscord – Real-time Full Stack Chat Application 🚀
 
-Piscord is a real-time chat application inspired by modern platforms, built to demonstrate a robust and scalable architecture. This repository contains the **Kubernetes infrastructure and deployment manifests** to orchestrate the Piscord services.
+Piscord is a scalable, real-time chat architecture composed of **Angular 17+**, **Go**, **MongoDB**, and **Redis**. This repository contains the **Kubernetes infrastructure (k3d)** and deployment manifests.
 
 The application is composed of:
 
 - **Frontend**: Angular 17+ (Material, PrimeNG)
 - **Backend**: Go (Gorilla Mux, WebSocket)
 - **Database**: MongoDB & Redis
-
-## 📋 Prerequisites
-
-To run this project locally, ensure you have the following tools installed:
-
-- [Docker](https://www.docker.com/)
-- [k3d](https://k3d.io/) (Lightweight Kubernetes wrapper for Docker)
-- [kubectl](https://kubernetes.io/docs/tasks/tools/)
-- [Make](https://www.gnu.org/software/make/)
-
-# Piscord – Real-time Full Stack Chat Application 🚀
-
-Piscord is a scalable, real-time chat architecture composed of **Angular 17+**, **Go**, **MongoDB**, and **Redis**. This repository contains the **Kubernetes infrastructure (k3d)** and deployment manifests.
 
 ## 📋 Prerequisites
 

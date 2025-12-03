@@ -11,5 +11,5 @@ data:
   REDIS_STREAM_GROUP: piscord-workers
   REDIS_STREAM_CONSUMER: worker-1
 
-  MONGODB_URI: mongodb://admin:admin@mongo.piscord.svc.cluster.local:27017/piscord?authSource=admin
+  MONGODB_URI: mongodb://<username>:<password>@mongo.piscord.svc.cluster.local:27017/piscord?authSource=admin
   MONGODB_DATABASE: piscord
