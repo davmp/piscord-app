@@ -5,4 +5,5 @@ metadata:
   namespace: piscord
 data:
   PORT: "8000"
-  MONGO_URI: "mongodb://admin:admin@mongodb.piscord.svc.cluster.local:27017/piscord?authSource=admin"
+  MONGO_URI: mongodb://admin:admin@mongo.piscord.svc.cluster.local:27017/piscord?authSource=admin
+  REDIS_URI: redis://redis.piscord.svc.cluster.local:6379

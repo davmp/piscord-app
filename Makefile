@@ -39,8 +39,10 @@ cluster-down:
 deploy:
 	@echo "📦 Deploying Kubernetes resources..."
 	kubectl apply -f $(K8S_DIR)namespace.yaml
-	kubectl apply -f $(K8S_DIR)mongodb/ -n $(NAMESPACE)
+	kubectl apply -f $(K8S_DIR)mongo/ -n $(NAMESPACE)
+	kubectl apply -f $(K8S_DIR)redis/ -n $(NAMESPACE)
 	kubectl apply -f $(K8S_DIR)backend/ -n $(NAMESPACE)
+	kubectl apply -f $(K8S_DIR)worker/ -n $(NAMESPACE)
 	kubectl apply -f $(K8S_DIR)frontend/ -n $(NAMESPACE)
 	kubectl apply -f $(K8S_DIR)ingress.yaml
 	@echo "🚀 Deployment complete."
@@ -53,6 +55,10 @@ restart:
 	kubectl rollout restart deployment backend -n $(NAMESPACE)
 	@echo "🔄 Restarting frontend..."
 	kubectl rollout restart deployment frontend -n $(NAMESPACE)
+	@echo "🔄 Restarting redis..."
+	kubectl rollout restart deployment redis -n $(NAMESPACE)
+	@echo "🔄 Restarting worker..."
+	kubectl rollout restart deployment worker -n $(NAMESPACE)
 	@echo "✔ All services restarted."
 
 # --------------------------------------------------------
@@ -62,7 +68,9 @@ logs:
 	@echo "📜 Fetching logs..."
 	kubectl logs -n $(NAMESPACE) -l app=backend -f &
 	kubectl logs -n $(NAMESPACE) -l app=frontend -f &
-	kubectl logs -n $(NAMESPACE) -l app=mongodb -f
+	kubectl logs -n $(NAMESPACE) -l app=redis -f &
+	kubectl logs -n $(NAMESPACE) -l app=mongo -f &
+	kubectl logs -n $(NAMESPACE) -l app=worker -f
 
 # --------------------------------------------------------
 # Delete everything
@@ -71,7 +79,9 @@ delete:
 	@echo "🗑 Deleting Kubernetes resources..."
 	kubectl delete -f $(K8S_DIR)frontend/ -n $(NAMESPACE) --ignore-not-found
 	kubectl delete -f $(K8S_DIR)backend/ -n $(NAMESPACE) --ignore-not-found
-	kubectl delete -f $(K8S_DIR)mongodb/ -n $(NAMESPACE) --ignore-not-found
+	kubectl delete -f $(K8S_DIR)mongo/ -n $(NAMESPACE) --ignore-not-found
+	kubectl delete -f $(K8S_DIR)redis/ -n $(NAMESPACE) --ignore-not-found
+	kubectl delete -f $(K8S_DIR)worker/ -n $(NAMESPACE) --ignore-not-found
 	kubectl delete namespace $(NAMESPACE) --ignore-not-found
 	@echo "❌ All resources removed."
 
