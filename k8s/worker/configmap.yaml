@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: worker-config
+  namespace: piscord
+data:
+  REDIS_URI: redis://redis.piscord.svc.cluster.local:6379
+  REDIS_STREAM_NOTIFICATION_KEY: notification
+  REDIS_STREAM_CHAT_KEY: chat
+  REDIS_STREAM_USER_KEY: user
+  REDIS_STREAM_GROUP: piscord-workers
+  REDIS_STREAM_CONSUMER: worker-1
+
+  MONGODB_URI: mongodb://<username>:<password>@mongo.piscord.svc.cluster.local:27017/piscord?authSource=admin
+  MONGODB_DATABASE: piscord

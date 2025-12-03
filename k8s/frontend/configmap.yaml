@@ -5,4 +5,4 @@ metadata:
   namespace: piscord
 data:
   PORT: "4200"
-  API_URL: "http://backend.piscord.svc.cluster.local:8000"
+  API_URL: http://backend.piscord.svc.cluster.local:8000

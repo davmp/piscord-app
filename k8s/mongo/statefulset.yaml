@@ -1,38 +1,44 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: mongodb
+  name: mongo
   namespace: piscord
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: mongodb
-  replicas: 1
+      app: mongo
+  serviceName: mongo
   template:
     metadata:
       labels:
-        app: mongodb
+        app: mongo
     spec:
       containers:
-        - name: mongodb
+        - name: mongo
           image: mongo:7.0
           ports:
             - containerPort: 27017
+          args: ["--auth"]
           env:
             - name: MONGO_INITDB_ROOT_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: mongodb-secret
+                  name: mongo-secret
                   key: MONGO_INITDB_ROOT_USERNAME
             - name: MONGO_INITDB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mongodb-secret
+                  name: mongo-secret
                   key: MONGO_INITDB_ROOT_PASSWORD
           volumeMounts:
-            - name: data
+            - name: mongo-data
               mountPath: /data/db
-      volumes:
-        - name: data
-          persistentVolumeClaim:
-            claimName: mongodb-pvc
+  volumeClaimTemplates:
+    - metadata:
+        name: mongo-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
