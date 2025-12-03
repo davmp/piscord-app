@@ -1,24 +1,5 @@
 # Piscord – Real-time Full Stack Chat Application 🚀
 
-Piscord is a real-time chat application inspired by modern platforms, built to demonstrate a robust and scalable architecture. This repository contains the **Kubernetes infrastructure and deployment manifests** to orchestrate the Piscord services.
-
-The application is composed of:
-
-- **Frontend**: Angular 17+ (Material, PrimeNG)
-- **Backend**: Go (Gorilla Mux, WebSocket)
-- **Database**: MongoDB & Redis
-
-## 📋 Prerequisites
-
-To run this project locally, ensure you have the following tools installed:
-
-- [Docker](https://www.docker.com/)
-- [k3d](https://k3d.io/) (Lightweight Kubernetes wrapper for Docker)
-- [kubectl](https://kubernetes.io/docs/tasks/tools/)
-- [Make](https://www.gnu.org/software/make/)
-
-# Piscord – Real-time Full Stack Chat Application 🚀
-
 Piscord is a scalable, real-time chat architecture composed of **Angular 17+**, **Go**, **MongoDB**, and **Redis**. This repository contains the **Kubernetes infrastructure (k3d)** and deployment manifests.
 
 ## 📋 Prerequisites
@@ -36,7 +17,7 @@ Piscord is a scalable, real-time chat architecture composed of **Angular 17+**, 
 1.  **Generate Base64 Secrets:** `echo -n "mypassword" | base64`
 2.  **Update Manifests:**
     - `k8s/backend/secret.yaml`: Set `JWT_SECRET` (Base64).
-    - `k8s/mongo/secret.yaml`: Set Root Username/Password (Base64).
+    - `k8s/mongodb/secret.yaml`: Set Root Username/Password (Base64).
     - `k8s/backend/configmap.yaml`: Set `MONGO_URI` (Plain text connection string).
 
 ## 🔥 Quick Start
@@ -98,7 +79,7 @@ The `Makefile` provides several utility commands to manage the lifecycle of the 
 | `make cluster-down` | Deletes the `piscord` k3d cluster.                                           |
 | `make deploy`       | Applies all K8s manifests (`k8s/`) to the cluster.                           |
 | `make restart`      | Restarts frontend and backend deployments (useful after image updates).      |
-| `make logs`         | Tails logs for frontend, backend, and mongo pods simultaneously.             |
+| `make logs`         | Tails logs for frontend, backend, and mongodb pods simultaneously.           |
 | `make status`       | Shows the current status of pods and services in the `piscord` namespace.    |
 | `make delete`       | Removes all deployed resources from the cluster (keeps the cluster running). |
 
@@ -122,6 +103,5 @@ This repository focuses on the **Infrastructure as Code (IaC)** aspect.
 
 For the source code of the application services, please visit:
 
-- [**Frontend Repository**](https://github.com/davmp/piscord-frontend)
-- [**Backend Repository**](https://github.com/davmp/piscord-backend)
-- [**Persistence Worker Repository**](https://github.com/davmp/piscord-worker)
+- **Frontend Repository**: [piscord-app-frontend](https://github.com/davmp/piscord-app-frontend)
+- **Backend Repository**: [piscord-app-backend](https://github.com/davmp/piscord-app-backend)
